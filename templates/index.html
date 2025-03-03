@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analyzer Pro - India</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>FinE - Stock Analyzer Pro</span>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="input-section">
+            <div class="input-group">
+                <input type="text" id="stockSymbol" placeholder="Enter stock symbol (e.g., RELIANCE)">
+                <select id="exchange">
+                    <option value="NS">NSE</option>
+                    <option value="BO">BSE</option>
+                </select>
+                <input type="date" id="startDate">
+                <button id="analyzeBtn" onclick="analyzeStock()">Analyze Stock</button>
+            </div>
+        </div>
+
+        <div id="loadingIndicator" class="loading-indicator hidden">
+            Analyzing stock data...
+        </div>
+
+        <div id="errorMessage" class="error-message hidden"></div>
+
+        <div id="results" class="results-container hidden">
+            <div class="price-recommendation">
+                <div class="current-price">
+                    <h2>Current Price</h2>
+                    <p id="currentPrice">₹0.00</p>
+                </div>
+                <div class="recommendation">
+                    <h2>Recommendation</h2>
+                    <p id="recommendationBadge"></p>
+                </div>
+            </div>
+            <div class="analysis-grid">
+                <div class="signals-card">
+                    <h2>Trading Signals</h2>
+                    <ul id="signalsList"></ul>
+                </div>
+
+                <div class="metrics-card">
+                    <h2>Risk Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <label>Sharpe Ratio</label>
+                            <span id="sharpeRatio">-</span>
+                        </div>
+                        <div class="metric">
+                            <label>Volatility</label>
+                            <span id="volatility">-</span>
+                        </div>
+                        <div class="metric">
+                            <label>Max Drawdown</label>
+                            <span id="maxDrawdown">-</span>
+                        </div>
+                        <div class="metric">
+                            <label>Beta</label>
+                            <span id="beta">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="charts">
+            <div id="priceChart" class="chart-container"></div>
+            <div id="indicatorsChart" class="chart-container"></div>
+        </div>
+
+        <div class="disclaimer">
+            <p>Disclaimer: This tool is for educational purposes only. It does not constitute financial advice. Please consult with a financial advisor before making any investment decisions.</p>
+        </div>
+    </div>
+   
+    <footer class="footer" align="center">
+        <p>© 2025 FinE - Financial Empowerment for Everyone. All rights reserved.</p>
+    </footer>
+  
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
