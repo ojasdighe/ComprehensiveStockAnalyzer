@@ -18,6 +18,55 @@ function formatCurrency(value) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Fucntion Name - formatPercentage
+// Author - Ojas Ulhas Dighe
+// Date - 28th Mar 2025
+// Description - This function is used to format the percentage in the form of 0.00%.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function formatPercentage(value) {
+    return `${parseFloat(value).toFixed(2)}%`;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Function Name - updateFundamentalAnalysisSection
+// Author - Ojas Ulhas Dighe
+// Date - 28th Mar 2025
+// Description - This function updates the fundamental analysis section of the UI
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function updateFundamentalAnalysisSection(fundamentalData) {
+    // Basic Info Section
+    document.getElementById('companyName').textContent = fundamentalData.basic_info.company_name || 'N/A';
+    document.getElementById('sector').textContent = fundamentalData.basic_info.sector || 'N/A';
+    document.getElementById('industry').textContent = fundamentalData.basic_info.industry || 'N/A';
+
+    // Valuation Metrics
+    document.getElementById('marketCap').textContent = formatCurrency(fundamentalData.valuation_metrics.market_cap);
+    document.getElementById('peRatio').textContent = fundamentalData.valuation_metrics.pe_ratio.toFixed(2);
+    document.getElementById('forwardPE').textContent = fundamentalData.valuation_metrics.forward_pe.toFixed(2);
+    document.getElementById('priceToBook').textContent = fundamentalData.valuation_metrics.price_to_book.toFixed(2);
+    document.getElementById('dividendYield').textContent = formatPercentage(fundamentalData.valuation_metrics.dividend_yield);
+
+    // Financial Health
+    document.getElementById('totalRevenue').textContent = formatCurrency(fundamentalData.financial_health.total_revenue);
+    document.getElementById('grossProfit').textContent = formatCurrency(fundamentalData.financial_health.gross_profit);
+    document.getElementById('netIncome').textContent = formatCurrency(fundamentalData.financial_health.net_income);
+    document.getElementById('totalDebt').textContent = formatCurrency(fundamentalData.financial_health.total_debt);
+    document.getElementById('debtToEquity').textContent = fundamentalData.financial_health.debt_to_equity.toFixed(2);
+    document.getElementById('returnOnEquity').textContent = formatPercentage(fundamentalData.financial_health.return_on_equity);
+
+    // Growth Metrics
+    document.getElementById('revenueGrowth').textContent = formatPercentage(fundamentalData.growth_metrics.revenue_growth);
+    document.getElementById('earningsGrowth').textContent = formatPercentage(fundamentalData.growth_metrics.earnings_growth);
+    document.getElementById('profitMargins').textContent = formatPercentage(fundamentalData.growth_metrics.profit_margins);
+
+    // Fundamental Recommendation
+    const fundamentalRecommendationBadge = document.getElementById('fundamentalRecommendationBadge');
+    fundamentalRecommendationBadge.textContent = fundamentalData.recommendation;
+    fundamentalRecommendationBadge.className = `recommendation-badge ${getRecommendationClass(fundamentalData.recommendation)}`;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Function Name - getRecommendationClass
 // Author - Ojas Ulhas Dighe
 // Date - 3rd Mar 2025
@@ -222,14 +271,16 @@ function updateUI(data) {
     document.getElementById('volatility').textContent = metrics.volatility.toFixed(2) + '%';
     document.getElementById('maxDrawdown').textContent = metrics.maxDrawdown.toFixed(2) + '%';
     document.getElementById('beta').textContent = metrics.beta ? metrics.beta.toFixed(2) : '-';
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Function Name - createPriceChart
-// Author - Ojas Ulhas Dighe
-// Date - 3rd Mar 2025
-// Description - This function is used to create the price chart.
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    document.getElementById('alpha').textContent = metrics.alpha ? metrics.alpha.toFixed(2) : '-';
+    document.getElementById('correlation').textContent = metrics.correlation ? metrics.correlation.toFixed(2) : '-';
+    
+    // Added Fundamental Analysis Section
+    if (data.fundamentalAnalysis) {
+        updateFundamentalAnalysisSection(data.fundamentalAnalysis);
+        document.getElementById('fundamentalAnalysisSection').classList.remove('hidden');
+    } else {
+        document.getElementById('fundamentalAnalysisSection').classList.add('hidden');
+    }
     createPriceChart(data.chartData);
     createIndicatorsChart(data.chartData);
 }
